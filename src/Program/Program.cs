@@ -6,16 +6,19 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Full_GRASP_And_SOLID.Library;
+using Library;
 
 namespace Full_GRASP_And_SOLID
 {
     public class Program
     {
-        private static ArrayList productCatalog = new ArrayList();
+        private static List<Product> productCatalog = new List<Product>();
 
-        private static ArrayList equipmentCatalog = new ArrayList();
+        private static List<Equipment> equipmentCatalog = new List<Equipment>();
 
         public static void Main(string[] args)
         {
@@ -26,9 +29,13 @@ namespace Full_GRASP_And_SOLID
             recipe.AddStep(new Step(GetProduct("Café"), 100, GetEquipment("Cafetera"), 120));
             recipe.AddStep(new Step(GetProduct("Leche"), 200, GetEquipment("Hervidor"), 60));
 
-            AllInOnePrinter printer = new AllInOnePrinter();
-            printer.PrintRecipe(recipe, Destination.Console);
-            printer.PrintRecipe(recipe, Destination.File);
+            IPrinterTerminal printer;
+            printer = new ConsolePrinter();
+            printer.PrintTicket(recipe);
+            printer = new FilePrinter();
+            printer.PrintTicket(recipe);
+
+            //Cambie la impresion y ahora uno utiliza las clases FilePrinter y ConsolePrinter por que se sigue el principio LSP
         }
 
         private static void PopulateCatalogs()
